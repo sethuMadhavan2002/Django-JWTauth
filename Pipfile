@@ -11,6 +11,8 @@ werkzeug = "*"
 jwt = "*"
 pyjwt = "*"
 django-cors-headers = "*"
+celery = {extras = ["redis"], version = "*"}
+redis = "*"
 
 [dev-packages]
 

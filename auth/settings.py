@@ -148,3 +148,14 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "madhavan.sethu@divum.in"
 EMAIL_HOST_PASSWORD = "Madhav@2492"
 EMAIL_USE_TLS = True
+
+
+# CELERY_BROKER_URL = "redis://localhost:6379/0"  # Use the appropriate broker URL
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = (
+    "redis://localhost:6379/0"  # Use the appropriate result backend URL
+)
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = "UTC"

@@ -1,12 +1,11 @@
-# from django.core.management.base import BaseCommand
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authentication import get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
+from celery import shared_task
 from .serializers import UserSerializers
-
 from .models import User
 import jwt, datetime
 
@@ -101,27 +100,25 @@ class UserView(APIView):
         return AuthenticationFailed("unauthenticated")
 
 
+@shared_task
+def send_adv_email_task():
+    users = User.objects.all()
+    emails = [user.email for user in users]
+
+    for email in emails:
+        if email != "madhavan.sethu@divum.in":
+            subject = "Special Advertisement Offer !!!"
+            message = "Dear user, check out our special offers in this email!"
+            from_email = "madhavan.sethu@divum.in"
+            to_email = email
+
+            send_mail(subject, message, from_email, [to_email])
+
+
 class SendAdvEmail(APIView):
     def post(self, request):
-        users = User.objects.all()
-        emails = [user.email for user in users]
-
-        for email in emails:
-            if email != "madhavan.sethu@divum.in":
-                subject = "Special Advertisement Offer !!!"
-                message = "Dear user, check out our special offers in this email!"
-                from_email = "madhavan.sethu@divum.in"
-                to_email = email
-
-                send_mail(subject, message, from_email, [to_email])
-
-        return Response(
-            {
-                "message": "Email Sent Successfully",
-                "emails": emails,
-                "data": {"from": from_email, "to": to_email},
-            }
-        )
+        send_adv_email_task.apply_async(countdown=1)
+        return Response({"message": "Email Sent Successfully"})
 
 
 class LogoutUser(APIView):
