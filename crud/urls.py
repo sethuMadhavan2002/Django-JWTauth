@@ -6,6 +6,8 @@ from .views import (
     UpdateProduct,
     DeleteProduct,
     ProductViewByID,
+    searchView,
+    addDocuments,
 )
 
 
@@ -15,4 +17,6 @@ urlpatterns = [
     path("add/", AddProductData, name="add"),
     path("update/<int:id>", UpdateProduct, name="update"),
     path("delete/<int:id>", DeleteProduct, name="delete"),
+    path("search", searchView, name="search"),
+    path("add-docs", addDocuments, name="add_docs"),
 ]

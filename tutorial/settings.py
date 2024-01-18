@@ -137,3 +137,5 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 DATABASES_ROUTERS = ["crud.routers.ReadReplicaRouter"]
+
+SOLR_SERVER = "http://localhost:8983/solr/test"
