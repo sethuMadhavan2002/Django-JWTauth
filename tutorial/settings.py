@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "crud",
     "debug_toolbar",
+    "haystack",
 ]
 
 MIDDLEWARE = [
@@ -139,3 +140,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 DATABASES_ROUTERS = ["crud.routers.ReadReplicaRouter"]
 
 SOLR_SERVER = "http://localhost:8983/solr/test"
+
+HAYSTACK_CONNECTIONS = {
+    "default": {
+        "ENGINE": "haystack.backends.solr_backend.SolrEngine",
+        "URL": "http://localhost:8983/solr/test",
+    },
+}

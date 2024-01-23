@@ -2,10 +2,12 @@ from django.shortcuts import render
 from django.conf import settings
 from django.http import JsonResponse
 from django.views import View
-from .models import Product
-from .serializers import ProductSerializers
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import status
+from haystack.query import SearchQuerySet
+from .models import Product, Document
+from .serializers import ProductSerializers
 import pysolr
 
 
@@ -57,8 +59,7 @@ def searchView(request):
     query = request.GET.get("q", "")
     solr = pysolr.Solr(settings.SOLR_SERVER, always_commit=True)
 
-    results = solr.search(query)
-    # results = solr.search(q="title:Document")
+    results = solr.search(f"title:{query} OR content:{query}")
 
     response_data = []
 
@@ -72,13 +73,6 @@ def searchView(request):
         )
 
     return JsonResponse({"results": response_data})
-
-
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
-import pysolr
-from django.conf import settings
 
 
 @api_view(["POST"])
@@ -98,7 +92,9 @@ def addDocuments(request):
             )
 
         solr = pysolr.Solr(settings.SOLR_SERVER, always_commit=True)
-        solr.add(documents)
+        for document in documents:
+            newDocument = Document(title=document["title"], content=document["content"])
+            newDocument.save()
         solr.commit()
 
         return Response(

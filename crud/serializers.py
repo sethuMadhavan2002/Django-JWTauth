@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Product
+from haystack.query import SearchQuerySet
+from .models import Product, Document
 
 
 class ProductSerializers(serializers.ModelSerializer):
