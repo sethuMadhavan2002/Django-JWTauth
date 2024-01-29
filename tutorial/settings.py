@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-#-lv-g)8ler7!x9robvk1lgm!-)(o(6(4axag8ysq1p6v_=hyc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -82,8 +82,11 @@ DATABASES = {
         "NAME": "crud",
         "USER": "madhav",
         "PASSWORD": "Madhav-2492",
-        "HOST": "localhost",
+        "HOST": "127.0.0.1",
         "PORT": "3306",
+        "OPTIONS": {
+            "unix_socket": "/var/run/mysqld/mysqld.sock",
+        },
     },
     "read_replica": {
         "ENGINE": "django.db.backends.mysql",
@@ -130,7 +133,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "static/"
+# STATIC_URL = "static/"
+STATIC_URL = "/static/"
+STATIC_ROOT = "/app/static/"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -139,11 +145,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 DATABASES_ROUTERS = ["crud.routers.ReadReplicaRouter"]
 
-SOLR_SERVER = "http://localhost:8983/solr/test"
+SOLR_SERVER = "http://localhost:8983/solr/mycol1"
 
 HAYSTACK_CONNECTIONS = {
     "default": {
         "ENGINE": "haystack.backends.solr_backend.SolrEngine",
-        "URL": "http://localhost:8983/solr/test",
+        "URL": "http://localhost:8983/solr/mycol1",
     },
 }
